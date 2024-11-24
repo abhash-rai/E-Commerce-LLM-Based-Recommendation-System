@@ -35,7 +35,7 @@ If you get docker version and build text then, enter (make sure Docker Desktop i
 docker pull qdrant/qdrant
 ```
 
-Run qdrant server on docker with below command but replace `<PathToLocalRepo>` portion with the `full path` of the project directory noted in `step 1`:
+Run qdrant server on docker with below command but replace `<PathToLocalRepo>` portion with the `full path` of the project directory noted in `step 1`. Example `<PathToLocalRepo>` would be something like 'D:/temp/E-Commerce-LLM-Based-Recommendation-System'.
 ```
 docker run -d --name qdrant -p 6333:6333 -v <PathToLocalRepo>/db/qdrant_storage:/qdrant/storage qdrant/qdrant
 ```
