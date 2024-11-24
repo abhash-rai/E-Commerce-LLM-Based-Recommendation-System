@@ -99,6 +99,6 @@ Open [fine-tuning.ipynb](./llm/fine-tuning.ipynb)) in VS Code and select the pre
 python run.py
 ```
 
-Wait a while until server is fully loaded, then to try out the APIs go to: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs). There are 3 APIs for searching products, recommending product to a customer, and storing recommendation feedback.
+Wait a while until server is fully loaded, then to try out the APIs go to: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs). There are 3 APIs for searching products, recommending product to a customer, and storing recommendation feedback. Explore the APIs along with the database: `E-Commerce-LLM-Based-Recommendation-System/db/sqlite_storage/main.db` for id of entities and how APIs manage database.
 
 You can modify [run.py](./run.py) and [sql_db.py](./db/sql_db.py) to add endpoints to perform CRUD operations on every models detailed in [sql_models.py](./db/sql_models.py) to make a full fledged server.
