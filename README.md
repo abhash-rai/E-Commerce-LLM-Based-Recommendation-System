@@ -74,6 +74,11 @@ Go to same [pytorch.org](https://pytorch.org/) site and scroll down to 'Install 
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 ```
 
+Finally, install:
+```
+pip install transformers[torch]
+```
+
 # Step 4: (Optional) Populate database with synthetic data
 
 You can start experimenting with synthetic data which is not necessary but recommended for trying out. To populate synthetic data run below command, which will create sqlite database and vectore collection for products automatically (will take a few moments):
