@@ -89,8 +89,8 @@ CANDIDATES FOR RECOMMENDATION: {candidates_for_recommendation}
             'recommendation_id': recommendation_id,
         }
 
-    def generate_dataset_for_llm_fine_tuning(self):
-        os.makedirs(os.path.dirname(constants.LLM_FINE_TUNE_CSV_DATASET_FILE_PATH), exist_ok=True)
+    def generate_dataset_for_llm_fine_tuning(self, csv_file_path: str):
+        os.makedirs(os.path.dirname(csv_file_path), exist_ok=True)
 
         df = pd.DataFrame(columns=['input', 'output'])
 
@@ -122,4 +122,4 @@ CANDIDATES FOR RECOMMENDATION: {candidates_for_recommendation}
 
             df.loc[len(df)] = [query, f'{answer_id},{answer_text}']  # Add to the DataFrame
         
-        df.to_csv(constants.LLM_FINE_TUNE_CSV_DATASET_FILE_PATH, index=False)
+        df.to_csv(csv_file_path, index=False)

@@ -15,7 +15,8 @@ from db.tokenizer import TextTokenizer
 
 class DB:
 
-    def __init__(self):
+    def __init__(self, database_location: str = None):
+        self.database_location = constants.SQL_DB_PATH if database_location is None else database_location
         self.engine = None
         self.text_embedder = TextEmbedder()
         self.qdrant_product_database = QdrantDatabase(collection_name=constants.QDRANT_PRODUCT_COLLECTION_NAME)
@@ -24,12 +25,12 @@ class DB:
         
     def initialize_database(self):
         if self.engine is None:
-            os.makedirs(os.path.dirname(constants.SQL_DB_PATH), exist_ok=True)
+            os.makedirs(os.path.dirname(self.database_location), exist_ok=True)
 
-            sqlite_url = f"sqlite:///{constants.SQL_DB_PATH}"
+            sqlite_url = f"sqlite:///{self.database_location}"
             self.engine = create_engine(sqlite_url, echo=True)
             
-            if os.path.exists(constants.SQL_DB_PATH):
+            if os.path.exists(self.database_location):
                 pass
             else:
                 print("Database does not exist. Initializing...")
