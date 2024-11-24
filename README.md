@@ -76,12 +76,12 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 # Step 4: (Optional) Populate database with synthetic data
 
-You can start experimenting with synthetic data which is not necessary but recommended for trying out. To populate synthetic data run below command, which will create sqlite database and vectore collection for products automatically:
+You can start experimenting with synthetic data which is not necessary but recommended for trying out. To populate synthetic data run below command, which will create sqlite database and vectore collection for products automatically (will take a few moments):
 ```
 python populate_synthetic_db.py
 ```
 
-The sqlite database will be at 'E-Commerce-LLM-Based-Recommendation-System/db/sqlite_storage/main.db' and qdrant will store vector embeddings as collections at 'E-Commerce-LLM-Based-Recommendation-System/db/qdrant_storage'.
+The sqlite database will be at `E-Commerce-LLM-Based-Recommendation-System/db/sqlite_storage/main.db` and qdrant will store vector embeddings as collections at `E-Commerce-LLM-Based-Recommendation-System/db/qdrant_storage`.
 
 # Step 5: Fine Tune LLM
 
