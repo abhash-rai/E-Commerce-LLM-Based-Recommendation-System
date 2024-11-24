@@ -35,7 +35,7 @@ If you get docker version and build text then, enter (make sure Docker Desktop i
 docker pull qdrant/qdrant
 ```
 
-Run qdrant server on docker with below command but replace `<PathToLocalRepo>` portion with the `full path` of the project directory noted in `step 1`:
+Run qdrant server on docker with below command but replace `<PathToLocalRepo>` portion with the `full path` of the project directory noted in `step 1`. Example `<PathToLocalRepo>` would be something like 'D:/temp/E-Commerce-LLM-Based-Recommendation-System'.
 ```
 docker run -d --name qdrant -p 6333:6333 -v <PathToLocalRepo>/db/qdrant_storage:/qdrant/storage qdrant/qdrant
 ```
@@ -74,12 +74,19 @@ Go to same [pytorch.org](https://pytorch.org/) site and scroll down to 'Install 
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 ```
 
+Finally, install:
+```
+pip install transformers[torch]
+```
+
 # Step 4: (Optional) Populate database with synthetic data
 
-You can start experimenting with synthetic data which is not necessary but recommended for trying out. To populate synthetic data run below command, which will create sqlite database and vectore collection for products automatically:
+You can start experimenting with synthetic data which is not necessary but recommended for trying out. To populate synthetic data run below command, which will create sqlite database and vectore collection for products automatically (will take a few moments):
 ```
 python populate_synthetic_db.py
 ```
+
+The sqlite database will be at `E-Commerce-LLM-Based-Recommendation-System/db/sqlite_storage/main.db` and qdrant will store vector embeddings as collections at `E-Commerce-LLM-Based-Recommendation-System/db/qdrant_storage`.
 
 # Step 5: Fine Tune LLM
 
@@ -92,6 +99,6 @@ Open [fine-tuning.ipynb](./llm/fine-tuning.ipynb)) in VS Code and select the pre
 python run.py
 ```
 
-Wait a while until server is fully loaded, then to try out the APIs go to: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs). There are 3 APIs for searching products, recommending product to a customer, and storing recommendation feedback.
+Wait a while until server is fully loaded, then to try out the APIs go to: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs). There are 3 APIs for searching products, recommending product to a customer, and storing recommendation feedback. Explore the APIs along with the database: `E-Commerce-LLM-Based-Recommendation-System/db/sqlite_storage/main.db` for id of entities and how APIs manage database.
 
 You can modify [run.py](./run.py) and [sql_db.py](./db/sql_db.py) to add endpoints to perform CRUD operations on every models detailed in [sql_models.py](./db/sql_models.py) to make a full fledged server.
