@@ -1,0 +1,16 @@
+setuptools
+sqlmodel
+spacy
+nltk
+qdrant-client
+pandas
+datasets
+transformers
+# transformers[torch]
+huggingface-hub
+rouge_score
+sentencepiece
+scikit-learn
+evaluate
+fastapi
+uvicorn
