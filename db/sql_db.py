@@ -1,10 +1,10 @@
 import os
 from datetime import datetime
-
 import pandas as pd
-
+from typing import Dict
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select, or_
+from sqlalchemy.sql import func
 from sqlmodel import SQLModel, create_engine, Session, select
 
 import constants
@@ -275,4 +275,14 @@ class DB:
         else:
             return [product for product in search_results]
 
-    
+    def summarize_recommendation_feedback_rating(self) -> dict:
+        with Session(self.engine) as session:
+            statement = (
+                select(RecommendationFeedback.rating, func.count(RecommendationFeedback.rating))
+                .group_by(RecommendationFeedback.rating)
+            )
+
+            results = session.exec(statement).all()
+            results_dict = {result[0]:result[1] for result in results}
+        
+        return results_dict

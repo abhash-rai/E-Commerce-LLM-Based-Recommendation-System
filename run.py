@@ -106,6 +106,16 @@ async def set_recommendation_feedback(
     
     else:
         raise HTTPException(status_code=403, detail="Given user is not authorized to access or interact with this recommendation.")
-    
+
+@app.get("/get_recommendation_performance")
+async def get_recommendation_performance():
+    """
+    Returns a dictionary of the number of recommendations per rating score (0 to 5). Can be used for visualization like barplot for real time monitoring of recommendation performance from user feedbacks.
+
+    Returns:
+        dict: Key-value pairs where keys are rating scores and values are the count of recommendations for each score.
+    """
+    return db.summarize_recommendation_feedback_rating()
+
 if __name__ == "__main__":
     uvicorn.run(f"{Path(__file__).stem}:app", host=server_host, port=server_port, reload=True)
