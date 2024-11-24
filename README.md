@@ -90,7 +90,9 @@ The sqlite database will be at `E-Commerce-LLM-Based-Recommendation-System/db/sq
 
 # Step 5: Fine Tune LLM
 
-Open [fine-tuning.ipynb](./llm/fine-tuning.ipynb) in VS Code and select the previously generated virtual environment `.venv` as the kernel. Then, run each cell of the notebook which will ultimately generate csv dataset for fine tuning, tune `Google FLAN-T5` llm model, and save the fine tuned model locally for generating recommendations.
+Open [fine-tuning.ipynb](./llm/fine-tuning.ipynb) in VS Code and select the previously generated virtual environment `.venv` as the kernel. Then, run each cell of the notebook which will ultimately generate csv dataset for fine tuning, tune `Google FLAN-T5` LLM model, and save the fine tuned model locally for generating recommendations.
+
+LLM name along with similar informations and paths are set in [constants.py](./constants.py). You can choose to keep LLM_NAME to any one of: "google/flan-t5-small", "google/flan-t5-base", "google/flan-t5-large", "google/flan-t5-xl", or "google/flan-t5-xxl". For model information go to: [https://huggingface.co/docs/transformers/en/model_doc/flan-t5](https://huggingface.co/docs/transformers/en/model_doc/flan-t5)
 
 # Step 6: Run the server
 
