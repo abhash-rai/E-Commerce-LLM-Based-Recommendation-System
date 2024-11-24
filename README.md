@@ -81,6 +81,8 @@ You can start experimenting with synthetic data which is not necessary but recom
 python populate_synthetic_db.py
 ```
 
+The sqlite database will be at 'E-Commerce-LLM-Based-Recommendation-System/db/sqlite_storage/main.db' and qdrant will store vector embeddings as collections at 'E-Commerce-LLM-Based-Recommendation-System/db/qdrant_storage'.
+
 # Step 5: Fine Tune LLM
 
 Open [fine-tuning.ipynb](./llm/fine-tuning.ipynb)) in VS Code and select the previously generated virtual environment `.venv` as the kernel. Then, run each cell of the notebook which will ultimately generate csv dataset for fine tuning, tune `Google FLAN-T5` llm model, and save the fine tuned model locally for generating recommendations.
