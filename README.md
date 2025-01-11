@@ -49,7 +49,7 @@ pip install virtualenv
 
 I found python3.12 works well along with the required dependencies so create virtual environment named `.venv` with the same python version:
 ```
-virtualenv -p python3.12 .venv
+python -m virtualenv -p python3.12 .venv
 ```
 
 Activate the virtual environment:
