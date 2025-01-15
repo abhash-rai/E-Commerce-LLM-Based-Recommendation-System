@@ -17,6 +17,10 @@ app = FastAPI()
 async def read_root():
     return {"message": f"Try ot APIs: http://{server_host}:{server_port}/docs"}
 
+@app.get("/get_customer_profile/{user_id}")
+async def get_customer_profile(user_id: int):
+    return llm.get_user_profile(user_id)
+
 @app.get("/recommend_product/{user_id}")
 async def recommend_product(user_id: int):
     """

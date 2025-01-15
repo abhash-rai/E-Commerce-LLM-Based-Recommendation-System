@@ -44,17 +44,26 @@ class LLM:
         generated_text = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
         return generated_text
 
-    def engineer_prompt(self, profile_description: str, user_search_history: str, candidates_for_recommendation: dict) -> str:
+    def engineer_prompt(self, profile_description: str, user_search_history: str, candidates_for_recommendation, return_customer_info_only = False) -> str:
         '''
         Parameters:
             - profile_description (str): example -> "I love gaming and books"
             - user_search_history (str): example -> "Laptop,Video Games,Gaming Mouse,Gaming Headset,Piano,Wireless Earbuds"
             - candidates_for_recommendation (dict) -> {1:"Laptop", 2:"PlayStation 5", 3:"Xbox Series X", 4:"Gaming Chair"}
         '''
-        return f'''Based on the customer profile and search history, recommend the most relevant product with the format: key_id,product_name from CANDIDATES FOR RECOMMENDATION below:
+        if return_customer_info_only:  
+            return f'''Customer Profile: 
+{profile_description}
+
+Search History: 
+{user_search_history}'''
+        
+        else:
+            return f'''Given the following customer profile and search history, suggest the most relevant product from the provided list of candidates. Return only the name of the product that best matches the customer's needs based on their profile and search activity.
 Customer Profile: {profile_description}
 Search History: {user_search_history}
-CANDIDATES FOR RECOMMENDATION: {candidates_for_recommendation}
+Products for Recommendation: {candidates_for_recommendation}
+Your Task: Select the most suitable product from the list of "Products for Recommendation" based on the customer profile and search history.
 '''
     
     def make_recommendation_for_customer(self, user_id: int) -> int:
@@ -78,16 +87,32 @@ CANDIDATES FOR RECOMMENDATION: {candidates_for_recommendation}
         print(query)
 
         recommendation_str = self.make_inference_on_model(query)
-        recommended_product_id = int(recommendation_str.split(',')[0])
-        recommended_product_name = recommendation_str.replace(f'{recommended_product_id},', '').strip()
-        print(recommended_product_id, recommended_product_name)
-
-        recommendation_id = self.db.record_recommendation(user_id, recommended_product_id)
+        # recommended_product_id = int(recommendation_str.split(',')[0])
+        # recommended_product_name = recommendation_str.replace(f'{recommended_product_id},', '').strip()
+        # print(recommended_product_id, recommended_product_name)
+        
+        for product in products_for_recommendation:
+            if recommendation_str.strip().lower() == product.name.strip().lower():
+                recommended_product_id = product.product_id
+                recommendation_id = self.db.record_recommendation(user_id, recommended_product_id)
+                break
         
         return {
             'product_id': recommended_product_id,
             'recommendation_id': recommendation_id,
         }
+
+        return recommendation_str
+    
+    def get_user_profile(self, user_id):
+        profile_description = self.db.get_data("User", user_id)['profile_description']
+
+        with Session(self.engine) as session:
+            statement = select(SearchHistory.query).where(SearchHistory.user_id ==  user_id)
+            all_user_search_history = session.exec(statement).all()
+            all_user_search_history_str = ','.join(all_user_search_history)
+
+        return self.engineer_prompt(profile_description, all_user_search_history_str, None, return_customer_info_only=True)
 
     def generate_dataset_for_llm_fine_tuning(self, csv_file_path: str):
         os.makedirs(os.path.dirname(csv_file_path), exist_ok=True)
@@ -114,12 +139,16 @@ CANDIDATES FOR RECOMMENDATION: {candidates_for_recommendation}
                 all_user_search_history_str = ','.join(all_user_search_history)
 
             products_for_recommendation = self.db.search_product(profile_description, use_vectore_search=True, similarity_threshold=0.3, return_as_dict=False)
-            products_dict_for_recommendation = {product.product_id: product.name for product in products_for_recommendation}
-            if answer_text not in products_dict_for_recommendation.values():
-                products_dict_for_recommendation[answer_id] = answer_text
+            # products_dict_for_recommendation = {product.product_id: product.name for product in products_for_recommendation}
+            # if answer_text not in products_dict_for_recommendation.values():
+            #     products_dict_for_recommendation[answer_id] = answer_text
+            
+            products_dict_for_recommendation = [product.name for product in products_for_recommendation]
+            if answer_text not in products_dict_for_recommendation:
+                products_dict_for_recommendation.append(answer_text)
             
             query = self.engineer_prompt(profile_description, all_user_search_history_str, products_dict_for_recommendation)
 
-            df.loc[len(df)] = [query, f'{answer_id},{answer_text}']  # Add to the DataFrame
+            df.loc[len(df)] = [query, f'{answer_text}']  # Add to the DataFrame
         
         df.to_csv(csv_file_path, index=False)
